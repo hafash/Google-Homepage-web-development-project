@@ -26,6 +26,7 @@ const SearchContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 12px;
   max-width: 560px;
   border: 1px solid #ddd;
   border-radius: 24px;
@@ -48,7 +49,7 @@ const SearchInput = styled.input`
 const VoiceIcon = styled.img`
   width: 34px; 
   height: 34px; 
-  margin-left: 10px;
+  margin-left: 210px;
   cursor: pointer;
   &:hover {
     opacity: 0.8;
@@ -58,7 +59,7 @@ const VoiceIcon = styled.img`
 const LensIcon = styled.img`
   width: 54px; 
   height: 54px; 
-  margin-left: 10px;
+  margin-left: 2px;
   cursor: pointer;
   &:hover {
     opacity: 0.8;
