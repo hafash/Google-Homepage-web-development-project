@@ -55,6 +55,7 @@ const FooterRight = styled.div`
     color: white;
     text-decoration: none;
   }
+  
 `;
 
 export default Footer;
