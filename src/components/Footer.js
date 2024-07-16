@@ -1,15 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
+import { FooterContainer, FooterContent, FooterLeft, FooterRight } from './styles';
 
 const Footer = () => {
   return (
-
     <FooterContainer>
+      {/* Footer content with location link */}
       <FooterContent>
         <FooterLeft>
           <a href="#">Rwanda</a>
         </FooterLeft>
       </FooterContent>
+      {/* Footer content with other links */}
       <FooterContent>
         <FooterLeft>
           <a href="#">About</a>
@@ -26,36 +27,5 @@ const Footer = () => {
     </FooterContainer>
   );
 };
-
-const FooterContainer = styled.div`
-  position: flexible;
-  bottom: 0;
-  width: 100%;
-  background-color: #303134;
-  color: white;
-`;
-
-const FooterContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 20px;
-`;
-
-const FooterLeft = styled.div`
-  a {
-    margin: 0 10px;
-    color: white;
-    text-decoration: none;
-  }
-`;
-
-const FooterRight = styled.div`
-  a {
-    margin: 0 10px;
-    color: white;
-    text-decoration: none;
-  }
-  
-`;
 
 export default Footer;

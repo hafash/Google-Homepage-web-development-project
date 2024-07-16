@@ -1,150 +1,52 @@
-
 import React, { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { useGetProductByIdQuery } from '../app/service/API';
 import SearchIcon from '@mui/icons-material/Search';
-import theme from '../theme';
+import { lightTheme, darkTheme } from '../theme';
 import GoogleLensIcon from '../assets/images/search by image.png';
 import GoogleVoiceIcon from '../assets/images/search by voice.png';
 
-const MainContainer = styled.main`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 140px);
-  background-color: #232121;
-  padding: 20px;
-
-  @media (max-width: 768px) {
-    height: auto;
-    padding: 15px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 10px;
-  }
-`;
-
-const Logo = styled.img`
-  width: 80%;
-  max-width: 272px;
-  height: auto;
-  margin-bottom: 30px;
-  filter: brightness(0) invert(1);
-
-  @media (max-width: 768px) {
-    width: 60%;
-  }
-
-  @media (max-width: 480px) {
-    width: 50%;
-  }
-`;
-
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 12px;
-  max-width: 560px;
-  border: 1px solid #ddd;
-  border-radius: 24px;
-  padding: 20px 10px;
-  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
-  background-color: #232121;
-`;
-
-const SearchInput = styled.input`
-  position: flexible;
-  padding: 10px;
-  font-size: 18px;
-  border: none;
-  outline: none;
-  background-color: inherit;
-  color: white;
-  caret-color: white;
-`;
-
-const VoiceIcon = styled.img`
-  width: 34px;
-  height: 34px;
-  margin-left: 210px;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const LensIcon = styled.img`
-  width: 54px;
-  height: 54px;
-  margin-left: 2px;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-top: 20px;
-`;
-
-const SearchButton = styled.button`
-  padding: 10px 20px;
-  background-color: #413d3d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  margin-right: 10px;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const FeelingLuckyButton = styled.button`
-  padding: 10px 20px;
-  background-color: #413d3d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const LanguageContainer = styled.div`
-  margin-top: 20px;
-  color: #9aa0a6;
-  font-size: 14px;
-  text-align: center;
-`;
-
-const ResultsContainer = styled.div`
-  color: white;
-  margin-top: 20px;
-`;
+// Import styled components for various UI elements
+import {
+  MainContainer,
+  Logo,
+  SearchContainer,
+  SearchInput,
+  ThemeToggleButton,
+  VoiceIcon,
+  LensIcon,
+  ButtonContainer,
+  SearchButton,
+  FeelingLuckyButton,
+  LanguageContainer,
+  ResultsContainer
+} from './styles';
 
 const Main = () => {
+  // State variables for product ID, result visibility, and theme mode
   const [productId, setProductId] = useState('');
   const [showResults, setShowResults] = useState(false);
-  const { data, isError, isLoading, refetch } = useGetProductByIdQuery(productId, { skip: !productId });
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
+  // Validation function for product ID
+  const isValidProductId = (id) => !isNaN(id) && id > 0;
+
+  // Query hook to fetch product data by ID, refetching only if productId is valid
+  const { data, isError, isLoading, refetch } = useGetProductByIdQuery(productId, { skip: !isValidProductId(productId) });
+
+  // Handler for search button click
   const handleSearch = () => {
-    if (productId) {
-      refetch();
+    if (isValidProductId(productId)) {
+      console.log('Fetching product with ID:', productId); // Log the search action
+      refetch(); // Refetch data for the provided product ID
       setShowResults(true);
     } else {
+      console.error('Invalid product ID:', productId); // Log an error for invalid product ID
       setShowResults(false);
     }
   };
 
+  // Handler for input change, updating product ID state
   const handleInputChange = (e) => {
     const value = e.target.value;
     setProductId(value);
@@ -153,30 +55,49 @@ const Main = () => {
     }
   };
 
+  // Toggle function for theme mode
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <MainContainer>
-        <Logo src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" />
+        {/* Google logo */}
+        <Logo
+          src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+          alt="Google"
+          theme={isDarkMode ? darkTheme : lightTheme}
+        />
+        {/* Search input container */}
         <SearchContainer>
           <SearchIcon style={{ marginRight: '10px', color: '#9aa0a6' }} />
           <SearchInput
             type="text"
-            placeholder="Enter any number"
+            placeholder="Enter a product ID"
             value={productId}
             onChange={handleInputChange}
           />
           <VoiceIcon src={GoogleVoiceIcon} alt="Google Voice" />
           <LensIcon src={GoogleLensIcon} alt="Google Lens" />
         </SearchContainer>
+
+        {/* Toggle button for theme mode */}
+        <ThemeToggleButton onClick={toggleDarkMode}>
+          {isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        </ThemeToggleButton>
+        {/* Buttons for search and "I'm Feeling Lucky" */}
         <ButtonContainer>
           <SearchButton onClick={handleSearch}>Google Search</SearchButton>
           <FeelingLuckyButton>I'm Feeling Lucky</FeelingLuckyButton>
         </ButtonContainer>
+       
         <LanguageContainer>
           Google offered in: <a href="#">Français</a> <a href="#">Kiswahili</a> <a href="#">Kinyarwanda</a>
         </LanguageContainer>
+        {/* Conditional rendering for loading, error, and result states */}
         {isLoading && <h1>Loading....</h1>}
-        {isError && <h1>We got an error</h1>}
+        {isError && <h1>Product not found</h1>}
         {showResults && data && (
           <ResultsContainer>
             <h1>{data?.title}</h1>

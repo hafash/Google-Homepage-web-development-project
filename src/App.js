@@ -1,29 +1,34 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
-import theme from './theme';
+import { lightTheme, darkTheme } from './theme';
 import GlobalStyle from './GlobalStyles';
 
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-`;
+// Import styled components for App container and toggle button
+import { AppContainer, ToggleThemeButton } from './components/styles';
 
-const App = () => (
-  <ThemeProvider theme={theme}>
-    <>
-      <GlobalStyle />
-      <AppContainer>
-        <Header />
-        <Main />
-        <Footer />
-      </AppContainer>
-    </>
-  </ThemeProvider>
-);
+const App = () => {
+  const [isDarkMode, setIsDarkMode] = useState(true); // Set initial state to true for dark mode
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+
+  return (
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <>
+        <GlobalStyle /> {/* Global styles */}
+        <AppContainer>
+          <Header /> {/* Header component */}
+          <Main /> {/* Main content component */}
+          <Footer /> {/* Footer component */}
+        </AppContainer>
+      </>
+    </ThemeProvider>
+  );
+};
 
 export default App;
